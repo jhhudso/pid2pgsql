@@ -1,0 +1,5 @@
+*.d
+pid2pgsql
+*.o
+*.mk
+makefile
