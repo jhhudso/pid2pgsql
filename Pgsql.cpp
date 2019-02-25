@@ -25,11 +25,6 @@ extern "C" {
 
 #include <sstream>
 #include <iostream>
-#include <openssl/crypto.h>
-#include <openssl/engine.h>
-#include <openssl/conf.h>
-#include <openssl/err.h>
-#include <openssl/fips.h>
 #include "Pgsql.h"
 #include "Clock.h"
 
