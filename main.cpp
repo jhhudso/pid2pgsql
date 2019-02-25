@@ -51,10 +51,15 @@ namespace po = boost::program_options;
 
 int main(int argc, char *argv[]) {
 	bool debug = false;
+	string dbname, dbhost, dbusername, dbpassword;
 	try {
 		po::options_description desc("Allowed options");
-		desc.add_options()("help,h", "produce_help_message");
-		desc.add_options()("debug,d", "enable debug messages");
+		desc.add_options()("help,?", "produce_help_message");
+		desc.add_options()("debug,D", "enable debug messages");
+		desc.add_options()("dbname,d", "database name");
+		desc.add_options()("host,h", "database server host");
+		desc.add_options()("username,U", "database user name");
+		desc.add_options()("password,W", "database password");
 		po::variables_map vm;
 		po::store(po::parse_command_line(argc, argv, desc), vm);
 		po::notify(vm);
@@ -65,6 +70,18 @@ int main(int argc, char *argv[]) {
 		if (vm.count("debug")) {
 			cerr << "Debug enabled." << endl;
 			debug = true;
+		}
+		if (vm.count("dbname")) {
+			dbname = vm["dbname"].as<string>();
+		}
+		if (vm.count("host")) {
+			dbname = vm["host"].as<string>();
+		}
+		if (vm.count("username")) {
+			dbname = vm["username"].as<string>();
+		}
+		if (vm.count("password")) {
+			dbname = vm["password"].as<string>();
 		}
 	} catch(...) {
 		return EXIT_FAILURE;
@@ -100,7 +117,7 @@ int main(int argc, char *argv[]) {
 
 	for (int attempt=0; attempt < 1; ++attempt) {
 		try {
-			Pgsql piddb("ender", "piddb", "piduser", "yter4Fk3", debug);
+			Pgsql piddb(dbhost.c_str(), dbname.c_str(), dbusername.c_str(), dbpassword.c_str(), debug);
 			piddb.begin();
 			Prepare pid_sets_insert = piddb.createPrepare("pid_sets_insert");
 			pid_sets_insert.setTableName("pid_sets");
